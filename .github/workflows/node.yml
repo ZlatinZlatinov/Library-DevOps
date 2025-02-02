@@ -1,6 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: build_test_deploy
 
 on:
@@ -11,27 +8,30 @@ on:
 
 jobs:
   build_test:
-
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repo on machine
       uses: actions/checkout@v4 
-    - run: cd client
+
     - name: Use Node.js 20.x
       uses: actions/setup-node@v4
       with:
         node-version: 20.x
         cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+
     - name: Install packages
       run: npm install
-    - name: Navigate to server folder
-      run: cd .. 
+      working-directory: client
+
     - name: Start server
       run: node server.js &
-    - name: Navigate to client again 
-      run: cd .. 
-    - run: cd client 
+      working-directory: server  # Assuming the server is in the "server" directory
+
     - name: Run tests 
-      run: npm start & 
-    - run: npm run tests
+      run: |
+        npm start &
+        sleep 5  # Wait for the server to start
+        npm run test
+      working-directory: client
