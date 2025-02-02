@@ -19,19 +19,19 @@ jobs:
       with:
         node-version: 20.x
         cache: 'npm'
-        cache-dependency-path: client/package-lock.json
+        cache-dependency-path: package-lock.json
 
-    - name: Install packages
-      run: npm install
-      working-directory: client
+    - name: Install dependencies
+      run: npm install  # Since package.json is at root, install from root
 
     - name: Start server
-      run: node server.js &
-      working-directory: server  # Assuming the server is in the "server" directory
+      run: node server/server.js &  # Assuming server.js is inside the "server" folder
 
-    - name: Run tests 
-      run: |
-        npm start &
-        sleep 5  # Wait for the server to start
-        npm run test
-      working-directory: client
+    - name: Start HTTP server
+      run: npm start &  # Starts the frontend server
+
+    - name: Wait for servers to start
+      run: sleep 5  # Gives servers time to initialize
+
+    - name: Run tests
+      run: npm run test
