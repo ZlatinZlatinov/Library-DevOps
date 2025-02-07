@@ -1,7 +1,8 @@
 import * as api from './api.js';
+import * as config from '../config.js';
 
-const host = 'https://library-devops-server.onrender.com'
-api.settings.host = 'https://library-devops-server.onrender.com';
+const host = config.settings.host;
+api.settings.host = host;
 
 export const login = api.login;
 export const register = api.register;
