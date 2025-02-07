@@ -22,19 +22,15 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-      working-directory: client 
 
     - name: Start server
-      run: node server.js &
-      working-directory: server  
+      run: npm run server & 
 
     - name: Set BE URL for local tests    
       run: echo "export const settings = {host:\"http://localhost:8080\"}" > src/config.js
-      working-directory: client
 
     - name: Start Front End
-      run: npm start &
-      working-directory: client  
+      run: npm start &  
 
     - name: Wait for servers to initialize
       run: sleep 5
